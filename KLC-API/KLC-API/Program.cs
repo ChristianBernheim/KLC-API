@@ -5,7 +5,10 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCors(options => options.AddPolicy("KLCPolicy", builder =>
+            builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()));
 //SQL-server
 builder.Services.AddDbContext<MatningContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -23,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("MyPolicy");
+app.MapControllers().RequireCors("KLCPolicy");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
