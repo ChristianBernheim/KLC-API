@@ -115,6 +115,29 @@ namespace KLC_API.Controllers
             return NoContent();
         }
 
+        // DELETE: api/MatningNews2/deleteAllFromPatient/5
+        //Verkar fungera , woohoo!
+        [HttpDelete("deleteAllFromPatient/{id}")]
+        public async Task<IActionResult> DeleteAllFromPatient(int id)
+        {
+            if (_context.MatningarNews2 == null)
+            {
+                return NotFound();
+            }
+
+            List<MatningNews2> matningar = await _context.MatningarNews2.Where((matning) => id == matning.PatientId).ToListAsync();
+            
+            if (matningar.FirstOrDefault() == null)
+            {
+                return NotFound();
+            }
+
+            _context.MatningarNews2.RemoveRange(matningar);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         private bool MatningNews2Exists(int id)
         {
             return (_context.MatningarNews2?.Any(e => e.Id == id)).GetValueOrDefault();
