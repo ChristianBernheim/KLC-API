@@ -49,6 +49,29 @@ namespace KLC_API.Controllers
             return matningNews2;
         }
 
+        // DELETE: api/MatningNews2/GetAllFromPatient/5
+        //ej testad
+        [HttpGet("GetAllFromPatient/{id}")]
+        public async Task<ActionResult<List<MatningNews2>>> GetAllFromPatient(int id)
+        {
+            if (_context.MatningarNews2 == null)
+            {
+                
+                return new List<Matning News2>();
+            }
+
+            List<MatningNews2> matningar = await _context.MatningarNews2.Where((matning) => id == matning.PatientId).ToListAsync();
+
+
+            if (matningar.FirstOrDefault() == null)
+            {
+                return NotFound();
+            }
+            
+            return matningar;
+        }
+        
+        
         // PUT: api/MatningNews2/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -127,6 +150,7 @@ namespace KLC_API.Controllers
 
             List<MatningNews2> matningar = await _context.MatningarNews2.Where((matning) => id == matning.PatientId).ToListAsync();
             
+
             if (matningar.FirstOrDefault() == null)
             {
                 return NotFound();
@@ -138,9 +162,59 @@ namespace KLC_API.Controllers
             return NoContent();
         }
 
+        
+        //DELETE: api/MatningsNews2/deleteAll
+        //ej testad
+        [HttpDelete("deleteAll")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            if (_context.MatningarNews2 == null)
+            {
+                return NotFound();
+            }
+
+            List<MatningNews2> matningar = await _context.MatningarNews2.ToListAsync();
+
+
+            if (matningar.FirstOrDefault() == null)
+            {
+                return NotFound();
+            }
+
+            _context.MatningarNews2.RemoveRange(matningar);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        // DELETE: api/MatningNews2/deleteLatestFromPatient/5
+        //Ej testad
+        [HttpDelete("deleteLatestFromPatient/{id}")]
+        public async Task<IActionResult> DeleteLatestFromPatient(int id)
+        {
+            if (_context.MatningarNews2 == null)
+            {
+                return NotFound();
+            }
+
+            List<MatningNews2> matningar = await _context.MatningarNews2.Where((matning) => id == matning.PatientId).ToListAsync();
+
+
+            if (matningar.FirstOrDefault() == null)
+            {
+                return NotFound();
+            }
+
+            _context.MatningarNews2.Remove(matningar.Last());
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
         private bool MatningNews2Exists(int id)
         {
             return (_context.MatningarNews2?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+
+
     }
 }
