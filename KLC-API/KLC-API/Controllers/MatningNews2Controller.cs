@@ -57,7 +57,7 @@ namespace KLC_API.Controllers
             if (_context.MatningarNews2 == null)
             {
                 
-                return new List<Matning News2>();
+                return new List<MatningNews2>();
             }
 
             List<MatningNews2> matningar = await _context.MatningarNews2.Where((matning) => id == matning.PatientId).ToListAsync();
