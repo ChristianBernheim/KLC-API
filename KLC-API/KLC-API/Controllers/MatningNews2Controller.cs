@@ -162,10 +162,11 @@ namespace KLC_API.Controllers
             return NoContent();
         }
 
-        
+
         //DELETE: api/MatningsNews2/deleteAll
         //ej testad
-        [HttpDelete("deleteAll")]
+        [HttpGet("deleteAll")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteAll()
         {
             if (_context.MatningarNews2 == null)
@@ -184,7 +185,7 @@ namespace KLC_API.Controllers
             _context.MatningarNews2.RemoveRange(matningar);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Content("All data raderad!");
         }
         // DELETE: api/MatningNews2/deleteLatestFromPatient/5
         //Ej testad
